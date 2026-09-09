@@ -1,0 +1,60 @@
+==================
+RUN with heredoc
+==================
+RUN <<EOF
+echo "Hello from heredoc"
+echo "Second line"
+EOF
+---
+
+(source_file
+  (run_instruction
+    (shell_command
+      (heredoc_marker))
+    (heredoc_block
+      (heredoc_line)
+      (heredoc_line)
+      (heredoc_line)
+      (heredoc_end))))
+
+==================
+COPY with stripping heredoc
+==================
+COPY <<-EOF /index.html
+<h1>Hello</h1>
+EOF
+---
+
+(source_file
+  (copy_instruction
+    source: (heredoc_marker)
+    destination: (path
+      (unquoted_string))
+    (heredoc_block
+      (heredoc_line)
+      (heredoc_line)
+      (heredoc_end))))
+
+==================
+ADD with multiple heredocs
+==================
+ADD <<EOF1 <<EOF2 /dest/
+content 1
+EOF1
+content 2
+EOF2
+---
+
+(source_file
+  (add_instruction
+    source: (heredoc_marker)
+    source: (heredoc_marker)
+    destination: (path
+      (unquoted_string))
+    (heredoc_block
+      (heredoc_line)
+      (heredoc_line)
+      (heredoc_end))
+    (heredoc_block
+      (heredoc_line)
+      (heredoc_end))))

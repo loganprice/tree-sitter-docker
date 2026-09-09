@@ -1,0 +1,280 @@
+==================
+FROM with tag and alias
+==================
+FROM node:18-alpine AS builder
+---
+
+(source_file
+  (from_instruction
+    image: (image_spec
+      (unquoted_string))
+    as: (image_alias)))
+
+==================
+FROM with platform flag
+==================
+FROM --platform=linux/amd64 ubuntu:22.04
+---
+
+(source_file
+  (from_instruction
+    (param
+      (param_name)
+      value: (unquoted_string))
+    image: (image_spec
+      (unquoted_string))))
+
+==================
+RUN shell command
+==================
+RUN apt-get update && apt-get install -y curl
+---
+
+(source_file
+  (run_instruction
+    (shell_command
+      (unquoted_value)
+      (unquoted_value)
+      (unquoted_value)
+      (unquoted_value)
+      (unquoted_value)
+      (unquoted_value))))
+
+==================
+RUN exec form
+==================
+RUN ["npm", "run", "build"]
+---
+
+(source_file
+  (run_instruction
+    (json_string_array
+      (double_quoted_string)
+      (double_quoted_string)
+      (double_quoted_string))))
+
+==================
+CMD exec form
+==================
+CMD ["node", "app.js"]
+---
+
+(source_file
+  (cmd_instruction
+    (json_string_array
+      (double_quoted_string)
+      (double_quoted_string))))
+
+==================
+ENTRYPOINT shell form
+==================
+ENTRYPOINT /entrypoint.sh --daemon
+---
+
+(source_file
+  (entrypoint_instruction
+    (shell_command
+      (unquoted_value)
+      (unquoted_value))))
+
+==================
+LABEL multiple pairs
+==================
+LABEL maintainer="admin@example.com" version="2.0"
+---
+
+(source_file
+  (label_instruction
+    (label_pair
+      key: (unquoted_string)
+      value: (string
+        (double_quoted_string)))
+    (label_pair
+      key: (unquoted_string)
+      value: (string
+        (double_quoted_string)))))
+
+==================
+ENV key-value and spaced
+==================
+ENV PORT=8080
+ENV HOST=0.0.0.0 DEBUG=true
+ENV APP_HOME /opt/app
+---
+
+(source_file
+  (env_instruction
+    (env_pair
+      name: (identifier)
+      value: (number)))
+  (env_instruction
+    (env_pair
+      name: (identifier)
+      value: (unquoted_string))
+    (env_pair
+      name: (identifier)
+      value: (identifier)))
+  (env_instruction
+    (env_pair
+      name: (identifier)
+      value: (unquoted_string))))
+
+==================
+EXPOSE port and protocol
+==================
+EXPOSE 80 443/tcp 53/udp
+---
+
+(source_file
+  (expose_instruction
+    (expose_port
+      port: (number))
+    (expose_port
+      port: (number)
+      protocol: (protocol))
+    (expose_port
+      port: (number)
+      protocol: (protocol))))
+
+==================
+COPY with flags
+==================
+COPY --chown=node:node src/ /app/src/
+---
+
+(source_file
+  (copy_instruction
+    (param
+      (param_name)
+      value: (unquoted_string))
+    source: (path
+      (unquoted_string))
+    destination: (path
+      (unquoted_string))))
+
+==================
+ADD archive to destination
+==================
+ADD app.tar.gz /usr/local/
+---
+
+(source_file
+  (add_instruction
+    source: (path
+      (unquoted_string))
+    destination: (path
+      (unquoted_string))))
+
+==================
+VOLUME JSON and paths
+==================
+VOLUME ["/var/log"]
+VOLUME /data /var/run
+---
+
+(source_file
+  (volume_instruction
+    (json_string_array
+      (double_quoted_string)))
+  (volume_instruction
+    (path
+      (unquoted_string))
+    (path
+      (unquoted_string))))
+
+==================
+USER with group
+==================
+USER 1000:1000
+---
+
+(source_file
+  (user_instruction
+    user: (user_name)
+    group: (user_name)))
+
+==================
+WORKDIR instruction
+==================
+WORKDIR /app
+---
+
+(source_file
+  (workdir_instruction
+    path: (path
+      (unquoted_string))))
+
+==================
+ARG with default
+==================
+ARG BRANCH=main
+ARG DEBUG
+---
+
+(source_file
+  (arg_instruction
+    name: (identifier)
+    default_value: (identifier))
+  (arg_instruction
+    name: (identifier)))
+
+==================
+ONBUILD instruction
+==================
+ONBUILD RUN make build
+---
+
+(source_file
+  (onbuild_instruction
+    (run_instruction
+      (shell_command
+        (unquoted_value)
+        (unquoted_value)))))
+
+==================
+STOPSIGNAL instruction
+==================
+STOPSIGNAL SIGTERM
+STOPSIGNAL 9
+---
+
+(source_file
+  (stopsignal_instruction
+    signal: (identifier))
+  (stopsignal_instruction
+    signal: (number)))
+
+==================
+HEALTHCHECK instruction
+==================
+HEALTHCHECK NONE
+HEALTHCHECK --interval=30s --timeout=5s CMD curl -f http://localhost/ || exit 1
+---
+
+(source_file
+  (healthcheck_instruction)
+  (healthcheck_instruction
+    (param
+      (param_name)
+      value: (unquoted_string))
+    (param
+      (param_name)
+      value: (unquoted_string))
+    (shell_command
+      (unquoted_value)
+      (unquoted_value)
+      (unquoted_value)
+      (unquoted_value)
+      (unquoted_value))))
+
+==================
+SHELL instruction
+==================
+SHELL ["/bin/bash", "-c"]
+---
+
+(source_file
+  (shell_instruction
+    (json_string_array
+      (double_quoted_string)
+      (double_quoted_string))))

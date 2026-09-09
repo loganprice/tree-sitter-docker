@@ -1,0 +1,57 @@
+{
+  "name": "tree-sitter-docker",
+  "version": "0.1.0",
+  "description": "Dockerfile grammar for tree-sitter",
+  "main": "bindings/node",
+  "types": "bindings/node",
+  "scripts": {
+    "test": "tree-sitter test",
+    "test:wasm": "tree-sitter test --wasm",
+    "generate": "tree-sitter generate",
+    "build": "tree-sitter generate && node-gyp rebuild",
+    "build:wasm": "tree-sitter build --wasm"
+  },
+  "keywords": [
+    "incremental",
+    "parsing",
+    "tree-sitter",
+    "dockerfile",
+    "docker"
+  ],
+  "author": "",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "grammar.js",
+    "binding.gyp",
+    "prebuilds/**",
+    "bindings/node/*",
+    "queries/*",
+    "src/*",
+    "tree-sitter.json"
+  ],
+  "dependencies": {
+    "nan": "^2.19.0"
+  },
+  "devDependencies": {
+    "tree-sitter": "^0.25.1",
+    "tree-sitter-cli": "^0.24.4"
+  },
+  "tree-sitter": [
+    {
+      "scope": "source.dockerfile",
+      "file-types": [
+        "Dockerfile",
+        "dockerfile",
+        "Containerfile",
+        "containerfile",
+        "Dockerfile.*",
+        "*.Dockerfile",
+        "*.dockerfile"
+      ],
+      "injection-regex": "^(dockerfile|Dockerfile|docker|containerfile)$"
+    }
+  ]
+}

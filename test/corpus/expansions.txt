@@ -1,0 +1,60 @@
+==================
+Variable expansion basic and braced
+==================
+ENV FOO=$BAR
+ENV BAZ=${BAR}
+---
+
+(source_file
+  (env_instruction
+    (env_pair
+      name: (identifier)
+      value: (expansion
+        name: (variable))))
+  (env_instruction
+    (env_pair
+      name: (identifier)
+      value: (expansion
+        name: (variable)))))
+
+==================
+Variable expansion with default and alternative
+==================
+ENV FOO=${BAR:-default_val}
+ENV BAZ=${BAR:+alt_val}
+---
+
+(source_file
+  (env_instruction
+    (env_pair
+      name: (identifier)
+      value: (expansion
+        name: (variable)
+        default: (unquoted_string))))
+  (env_instruction
+    (env_pair
+      name: (identifier)
+      value: (expansion
+        name: (variable)
+        default: (unquoted_string)))))
+
+==================
+Expansions in WORKDIR and double quotes
+==================
+WORKDIR ${APP_DIR}
+RUN echo "Hello ${USER_NAME:-world}"
+---
+
+(source_file
+  (workdir_instruction
+    path: (path
+      (expansion
+        name: (variable))))
+  (run_instruction
+    (shell_command
+      (unquoted_value)
+      (string
+        (double_quoted_string
+          (expansion
+            name: (variable)
+            default: (unquoted_string)))))))

@@ -1,0 +1,58 @@
+==================
+Parser directive syntax
+==================
+# syntax=docker/dockerfile:1.4
+FROM alpine
+---
+
+(source_file
+  (parser_directive)
+  (from_instruction
+    image: (image_spec
+      (unquoted_string))))
+
+==================
+Parser directive escape and comments
+==================
+# escape=`
+# This is a comment
+FROM ubuntu
+# Another comment
+RUN echo "hello"
+---
+
+(source_file
+  (parser_directive)
+  (comment)
+  (from_instruction
+    image: (image_spec
+      (unquoted_string)))
+  (comment)
+  (run_instruction
+    (shell_command
+      (unquoted_value)
+      (string
+        (double_quoted_string)))))
+
+==================
+Line continuation in RUN command
+==================
+RUN apt-get update && \
+    apt-get install -y \
+    curl \
+    git
+---
+
+(source_file
+  (run_instruction
+    (shell_command
+      (unquoted_value)
+      (unquoted_value)
+      (line_continuation)
+      (unquoted_value)
+      (unquoted_value)
+      (unquoted_value)
+      (line_continuation)
+      (unquoted_value)
+      (line_continuation)
+      (unquoted_value))))
