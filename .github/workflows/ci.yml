@@ -32,6 +32,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Generate parser
+        run: npm run generate
+
       - name: Run parser tests
         run: npm test
 
@@ -51,10 +54,11 @@ jobs:
           node-version: '24'
           cache: 'npm'
 
-      - name: Install dependencies
+      - name: Install dependencies & generate parser
         run: |
           npm ci
           echo "$PWD/node_modules/.bin" >> $GITHUB_PATH
+          npm run generate
 
       - name: Run C binding tests
         run: make test-c
@@ -76,6 +80,17 @@ jobs:
         with:
           go-version-file: 'go.mod'
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install dependencies & generate parser
+        run: |
+          npm ci
+          npm run generate
+
       - name: Run Go tests
         run: go test -v ./...
 
@@ -96,8 +111,16 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Install dependencies & package
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install dependencies & generate parser
         run: |
+          npm ci
+          npm run generate
           python -m pip install --upgrade pip
           pip install pytest tree-sitter
           pip install .
@@ -115,6 +138,17 @@ jobs:
       - name: Set up Rust
         uses: dtolnay/rust-toolchain@stable
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install dependencies & generate parser
+        run: |
+          npm ci
+          npm run generate
+
       - name: Run Rust tests
         run: cargo test --all-targets
 
@@ -124,6 +158,17 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install dependencies & generate parser
+        run: |
+          npm ci
+          npm run generate
 
       - name: Run Swift tests
         run: swift test
