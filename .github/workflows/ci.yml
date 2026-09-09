@@ -65,8 +65,8 @@ jobs:
 
       - name: Build with CMake
         run: |
-          cmake -B build
-          cmake --build build
+          cmake -B cmake-build
+          cmake --build cmake-build
 
   test-go:
     name: Go Tests

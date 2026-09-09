@@ -1,8 +1,9 @@
-// swift-tools-version:5.3
+// swift-tools-version: 5.9
 import PackageDescription
 
 let package = Package(
     name: "TreeSitterDockerfile",
+    platforms: [.macOS(.v10_13), .iOS(.v11), .tvOS(.v12), .watchOS(.v5)],
     products: [
         .library(name: "TreeSitterDockerfile", targets: ["TreeSitterDockerfile"]),
     ],
@@ -16,7 +17,7 @@ let package = Package(
             path: ".",
             sources: [
                 "src/parser.c",
-                // NOTE: if your language has an external scanner, add it here.
+                "src/scanner.c",
             ],
             resources: [
                 .copy("queries")

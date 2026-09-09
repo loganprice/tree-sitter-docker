@@ -1,6 +1,15 @@
 node_modules/
 build/
+cmake-build/
 target/
 *.log
 .DS_Store
 tree-sitter-dockerfile.wasm
+
+# Compiled binaries and libraries
+*.o
+*.a
+*.so
+*.dylib
+*.dll
+*.pc
