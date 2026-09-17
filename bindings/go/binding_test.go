@@ -1,14 +1,13 @@
-package tree_sitter_dockerfile_test
+package tree_sitter_dockerfile
 
 import (
 	"testing"
 
 	tree_sitter "github.com/tree-sitter/go-tree-sitter"
-	tree_sitter_dockerfile "github.com/tree-sitter/tree-sitter-dockerfile/bindings/go"
 )
 
 func TestCanLoadGrammar(t *testing.T) {
-	language := tree_sitter.NewLanguage(tree_sitter_dockerfile.Language())
+	language := tree_sitter.NewLanguage(Language())
 	if language == nil {
 		t.Errorf("Error loading Dockerfile grammar")
 	}
@@ -18,7 +17,7 @@ func TestParseDockerfile(t *testing.T) {
 	parser := tree_sitter.NewParser()
 	defer parser.Close()
 
-	language := tree_sitter.NewLanguage(tree_sitter_dockerfile.Language())
+	language := tree_sitter.NewLanguage(Language())
 	if err := parser.SetLanguage(language); err != nil {
 		t.Fatalf("Failed to set language: %v", err)
 	}
