@@ -18,7 +18,11 @@
     "dockerfile",
     "docker"
   ],
-  "author": "",
+  "author": "Logan Price",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/loganprice/tree-sitter-docker.git"
+  },
   "license": "MIT",
   "publishConfig": {
     "access": "public"
